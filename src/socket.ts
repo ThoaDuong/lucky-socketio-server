@@ -79,5 +79,15 @@ export const ioConfig = (server: any, corsOptions: any) => {
             updateUserReleaseAdmin(username);
             io.to(room).emit('someoneReleaseAdminToAll');
         })
+        
+        //listen someone typing
+        socket.on('typingMessage', ({username, room}) => {
+            socket.broadcast.to(room).emit('someoneTypingMessage', username);
+        })
+
+        //listen someone no longer typing
+        socket.on('noLongerTypingMessage', ({username, room}) => {
+            socket.broadcast.to(room).emit('someoneNoLongerTyping', username);
+        })
     })
 }
