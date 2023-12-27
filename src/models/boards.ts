@@ -1,4 +1,5 @@
 import { Board } from '../interfaces/Board';
+import { BoardRoom } from '../interfaces/BoardRoom';
 
 export const boards: Board[] = [
     {
@@ -153,33 +154,83 @@ export const boards: Board[] = [
             [null, 17, null, 36, null, 52, 64, null, 80],
             [null, 19, 23, null, 45, null, 62, 74, null]
         ]
-    }
+    },
+    {
+        id: 10,
+        title: 'Green 2',
+        color: 'green',
+        username: null,
+        numbers: [
+            [6, 18, null, null, 47, null, 69, null, 86],
+            [null, 13, null, 31, 44, null, 61, 70, null],
+            [7, null, 24, 34, null, 56, null, 71, null],
+            [5, null, 23, null, 41, null, 65, 74, null],
+            [null, 10, null, 37, null, 53, 60, null, 89],
+            [null, 17, null, 38, 42, null, null, 75, 84],
+            [null, 15, 25, null, null, 51, null, 77, 85],
+            [null, 12, null, 36, 43, null, 64, null, 82],
+            [3, null, 26, 39, null, 58, 66, null, null]
+        ]
+    },
 ]
 
-export const initUsernameInBoard = (username: string) => {
-    //first index of board with username: null
-    const index = boards.findIndex(board => board.username === null);
-    const newBoardData = { ...boards[index], username: username }
-    boards.splice(index, 1, newBoardData);
+export const boards_room: BoardRoom[] = [];
+
+export const initBoardRoom = (username: string, room: string) => {
+    let boardId = 0;
+    for(let i=0; i<boards.length; i++){
+        //check if boardId not exist in boards_room
+        const index = boards_room.findIndex(b => 
+            b.boardId === boards[i].id &&
+            b.room === room);
+        if(index === -1){
+            //init boardId and stop the loop
+            boardId = boards[i].id;
+            break;
+        }
+    } 
+    boards_room.push({
+        username: username,
+        room: room,
+        boardId: boardId,
+    })
 }
+
+export const removeBoardRoom = (username: string, room: string) => {
+    const currentIndex = boards_room.findIndex(b => b.username === username && b.room === room);
+    boards_room.splice(currentIndex, 1);
+}
+
+export const  updateBoardRoom = (username: string, room: string, targetBoardId: number) => {
+    const currentIndex = boards_room.findIndex(b => b.username === username && b.room === room);
+    const newObject = { ...boards_room[currentIndex], boardId: targetBoardId };
+    boards_room.splice(currentIndex, 1, newObject);
+}
+
+///////////
+
+// export const initUsernameInBoard = (username: string) => {
+//     const index = boards.findIndex(board => board.username === null);
+//     const newBoardData = { ...boards[index], username: username }
+//     boards.splice(index, 1, newBoardData);
+// }
 
 //change username exist in boards to null
-export const removeUsernameInBoard = (username: string) => {
-    const indexChange = boards.findIndex(board => board.username === username);
-    const newBoardChange = { ...boards[indexChange], username: null }
-    boards.splice(indexChange, 1, newBoardChange);
-}
+// export const removeUsernameInBoard = (username: string) => {
+//     const indexChange = boards.findIndex(board => board.username === username);
+//     const newBoardChange = { ...boards[indexChange], username: null }
+//     boards.splice(indexChange, 1, newBoardChange);
+// }
 
-export const updateUsernameInBoard = (username: string, targetBoardId: number) => {
-    removeUsernameInBoard(username);
+// export const updateUsernameInBoard = (username: string, targetBoardId: number) => {
+//     removeUsernameInBoard(username);
 
-    //change username in previous board to target username
-    const indexTarget = boards.findIndex(board => board.id === targetBoardId);
-    const newBoardTarget = { ...boards[indexTarget], username: username };
-    boards.splice(indexTarget, 1, newBoardTarget);
-}
+//     const indexTarget = boards.findIndex(board => board.id === targetBoardId);
+//     const newBoardTarget = { ...boards[indexTarget], username: username };
+//     boards.splice(indexTarget, 1, newBoardTarget);
+// }
 
-export const getBoardByUsername = (username: string) => {
-    const board = boards.find(board => board.username === username);
-    return board;
-}
+// export const getBoardByUsername = (username: string) => {
+//     const board = boards.find(board => board.username === username);
+//     return board;
+// }

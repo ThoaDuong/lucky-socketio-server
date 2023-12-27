@@ -10,11 +10,6 @@ exports.boardRouter = express_1.default.Router();
 exports.boardRouter.get('/boards', (req, res) => {
     res.send(boards_1.boards);
 });
-exports.boardRouter.get('/boards/:username', (req, res) => {
-    const username = req.params.username;
-    res.send((0, boards_1.getBoardByUsername)(username));
-});
-exports.boardRouter.put('/boards', (req, res) => {
-    const { username, targetBoardId } = JSON.parse(req.body);
-    res.send((0, boards_1.updateUsernameInBoard)(username, targetBoardId));
+exports.boardRouter.get('/boards_room', (req, res) => {
+    res.send(boards_1.boards_room);
 });

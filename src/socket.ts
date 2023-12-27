@@ -1,7 +1,7 @@
 import { Server } from 'socket.io';
 import { User } from './interfaces/User';
 import { addNewUser, removeUser, updateUserReleaseAdmin, updateUserTakeAdmin } from './models/users';
-import { initUsernameInBoard, removeUsernameInBoard, updateUsernameInBoard } from './models/boards';
+import { initBoardRoom, removeBoardRoom, updateBoardRoom } from './models/boards';
 
 export const ioConfig = (server: any, corsOptions: any) => {
 
@@ -22,7 +22,7 @@ export const ioConfig = (server: any, corsOptions: any) => {
             }
             //handle with model
             addNewUser(user);
-            initUsernameInBoard(username);
+            initBoardRoom(username, room); 
             //handle user join room and broadcast event
             socket.join(room);
             socket.broadcast.to(room).emit('someoneJoinRoom', (username));
@@ -31,7 +31,7 @@ export const ioConfig = (server: any, corsOptions: any) => {
             socket.on("disconnect", () => {
                 //handle user leave
                 removeUser(user.id);
-                removeUsernameInBoard(username);
+                removeBoardRoom(username, room);
                 socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
                 socket.leave(room);
             })
@@ -40,7 +40,7 @@ export const ioConfig = (server: any, corsOptions: any) => {
         //listen user change board
         socket.on('userChangeBoard', ({username, room, targetBoardId}) => {
             //handle with model
-            updateUsernameInBoard(username, targetBoardId);
+            updateBoardRoom(username, room, targetBoardId);
             //send event to client
             io.to(room).emit('someoneChangeBoardToAll');
         })
@@ -66,6 +66,10 @@ export const ioConfig = (server: any, corsOptions: any) => {
         //listen someone win game
         socket.on('someoneWinGame', ({username, room}) => {
             socket.broadcast.to(room).emit('endGame', (username));
+        })
+
+        socket.on('gonnaWin', ({username, room}) => {
+            io.to(room).emit('someoneGonnaWinToAll', (username));
         })
 
         //listen user take admin

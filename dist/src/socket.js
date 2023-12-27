@@ -19,7 +19,7 @@ const ioConfig = (server, corsOptions) => {
             };
             //handle with model
             (0, users_1.addNewUser)(user);
-            (0, boards_1.initUsernameInBoard)(username);
+            (0, boards_1.initBoardRoom)(username, room);
             //handle user join room and broadcast event
             socket.join(room);
             socket.broadcast.to(room).emit('someoneJoinRoom', (username));
@@ -27,7 +27,7 @@ const ioConfig = (server, corsOptions) => {
             socket.on("disconnect", () => {
                 //handle user leave
                 (0, users_1.removeUser)(user.id);
-                (0, boards_1.removeUsernameInBoard)(username);
+                (0, boards_1.removeBoardRoom)(username, room);
                 socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
                 socket.leave(room);
             });
@@ -35,7 +35,7 @@ const ioConfig = (server, corsOptions) => {
         //listen user change board
         socket.on('userChangeBoard', ({ username, room, targetBoardId }) => {
             //handle with model
-            (0, boards_1.updateUsernameInBoard)(username, targetBoardId);
+            (0, boards_1.updateBoardRoom)(username, room, targetBoardId);
             //send event to client
             io.to(room).emit('someoneChangeBoardToAll');
         });
@@ -57,6 +57,9 @@ const ioConfig = (server, corsOptions) => {
         //listen someone win game
         socket.on('someoneWinGame', ({ username, room }) => {
             socket.broadcast.to(room).emit('endGame', (username));
+        });
+        socket.on('gonnaWin', ({ username, room }) => {
+            io.to(room).emit('someoneGonnaWinToAll', (username));
         });
         //listen user take admin
         socket.on('userTakeAdmin', ({ username, room }) => {
