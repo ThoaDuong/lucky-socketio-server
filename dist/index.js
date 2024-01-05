@@ -12,7 +12,7 @@ const socket_1 = require("./src/socket");
 //static variable
 const port = 8000;
 const corsOptions = {
-    origin: ['*', 'http://localhost:8080', 'http://lootoo.netlify.app']
+    origin: ['*', 'http://localhost:8080', 'http://lootoo.netlify.app', 'https://lootoo.netlify.app', 'http://lootoo.netlify.app/*', 'https://lootoo.netlify.app/*']
 };
 //global config
 const app = (0, express_1.default)();
