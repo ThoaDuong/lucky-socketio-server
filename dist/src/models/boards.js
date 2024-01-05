@@ -4,8 +4,8 @@ exports.updateBoardRoom = exports.removeBoardRoom = exports.initBoardRoom = expo
 exports.boards = [
     {
         id: 1,
-        color: "rgb(234 179 8)",
-        title: "Yellow",
+        color: "#719FB0",
+        title: "Sad blue",
         username: null,
         numbers: [
             [7, 16, null, 32, null, null, 66, 73, null],
@@ -21,7 +21,7 @@ exports.boards = [
     },
     {
         id: 2,
-        color: "rgb(236 72 153)",
+        color: "#FFD24C",
         title: "Pink",
         username: null,
         numbers: [
@@ -38,8 +38,8 @@ exports.boards = [
     },
     {
         id: 3,
-        color: "rgb(251 146 60)",
-        title: "Orange",
+        color: "#FF7396",
+        title: "Pink 1",
         username: null,
         numbers: [
             [5, null, 29, 30, null, 56, null, null, 80],
@@ -55,7 +55,7 @@ exports.boards = [
     },
     {
         id: 4,
-        color: "rgb(79 70 229)",
+        color: "#F76262",
         title: "Purple",
         username: null,
         numbers: [
@@ -72,7 +72,7 @@ exports.boards = [
     },
     {
         id: 5,
-        color: 'rgb(59 130 246)',
+        color: '#40A798',
         title: 'Blue',
         username: null,
         numbers: [
@@ -89,8 +89,8 @@ exports.boards = [
     },
     {
         id: 6,
-        color: 'rgb(101 163 13)',
-        title: 'Green',
+        color: '#845EC2',
+        title: 'Purple 2',
         username: null,
         numbers: [
             [null, 11, null, 35, null, 59, 68, null, 80],
@@ -106,7 +106,7 @@ exports.boards = [
     },
     {
         id: 7,
-        color: 'rgb(239 68 68)',
+        color: '#F5A962',
         title: 'Red',
         username: null,
         numbers: [
@@ -123,8 +123,8 @@ exports.boards = [
     },
     {
         id: 8,
-        color: 'rgb(120 53 15)',
-        title: 'Brown',
+        color: '#92B4EC',
+        title: 'Blue 2',
         username: null,
         numbers: [
             [null, 13, 22, null, 41, null, 61, null, 86],
@@ -140,8 +140,8 @@ exports.boards = [
     },
     {
         id: 9,
-        title: 'Orange 2',
-        color: 'rgb(251 191 36)',
+        title: 'Green 1',
+        color: '#36AE7C',
         username: null,
         numbers: [
             [null, 12, null, 34, 40, null, null, 75, 89],
@@ -157,8 +157,8 @@ exports.boards = [
     },
     {
         id: 10,
-        title: 'Green 2',
-        color: 'green',
+        title: 'Purple 1',
+        color: '#BC7AF9',
         username: null,
         numbers: [
             [6, 18, null, null, 47, null, 69, null, 86],
@@ -170,6 +170,40 @@ exports.boards = [
             [null, 15, 25, null, null, 51, null, 77, 85],
             [null, 12, null, 36, 43, null, 64, null, 82],
             [3, null, 26, 39, null, 58, 66, null, null]
+        ]
+    },
+    {
+        id: 11,
+        title: 'Yellow 1',
+        color: '#E9896A',
+        username: null,
+        numbers: [
+            [null, 14, 28, null, null, 50, null, 75, 90],
+            [null, 19, null, 31, 49, null, 68, null, 81],
+            [5, null, 20, null, 47, null, null, 77, 84],
+            [null, 12, null, 38, null, 55, 69, null, 89],
+            [1, null, null, 36, 41, null, 66, 71, null],
+            [null, 18, 26, null, null, 57, null, 70, 88],
+            [8, null, 25, 33, null, 52, 62, null, null],
+            [9, null, null, 35, 46, null, 60, 73, null],
+            [null, 10, 27, null, 48, 59, null, null, 86]
+        ]
+    },
+    {
+        id: 12,
+        title: 'Blue 1',
+        color: '#87C4FF',
+        username: null,
+        numbers: [
+            [null, 15, 24, null, 44, null, 64, 79, null],
+            [4, null, 29, 30, null, 51, null, 76, null],
+            [null, 17, null, 32, null, 53, 63, null, 80],
+            [7, null, 23, null, null, 56, 61, null, 85],
+            [null, 11, null, 34, 42, null, null, 72, 87],
+            [3, 13, null, null, 45, 54, null, 74, null],
+            [null, 16, 21, null, 43, 58, null, 78, null],
+            [6, null, null, 37, 40, null, 65, null, 82],
+            [2, null, 22, 39, null, null, 67, null, 83]
         ]
     },
 ];

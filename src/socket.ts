@@ -9,7 +9,6 @@ export const ioConfig = (server: any, corsOptions: any) => {
         cors: corsOptions
     });
 
-
     io.on('connection', (socket) => {
         
         //listen user join
