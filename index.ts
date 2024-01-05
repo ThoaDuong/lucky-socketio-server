@@ -8,7 +8,7 @@ import { ioConfig } from './src/socket';
 //static variable
 const port = 8000;
 const corsOptions = {
-    origin: ['http://localhost:8080']
+    origin: ['http://localhost:8080', 'https://lootoo.netlify.app/']
 }
 
 //global config
