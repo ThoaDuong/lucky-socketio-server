@@ -3,4 +3,5 @@ export interface User {
     username: string,
     room: string,
     isAdmin: boolean,
+    waitingList: number[]
 }

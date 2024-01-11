@@ -17,7 +17,8 @@ export const ioConfig = (server: any, corsOptions: any) => {
                 id: socket.id,
                 username: username,
                 room: room,
-                isAdmin: false
+                isAdmin: false,
+                waitingList: []
             }
             //handle with model
             addNewUser(user);
