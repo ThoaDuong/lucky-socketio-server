@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 import { User } from './interfaces/User';
-import { addNewUser, removeUser, updateUserReleaseAdmin, updateUserTakeAdmin } from './models/users';
+import { addNewUser, addUserWaitingList, clearUserWaitingList, removeUser, updateUserReleaseAdmin, updateUserTakeAdmin, users } from './models/users';
 import { initBoardRoom, removeBoardRoom, updateBoardRoom } from './models/boards';
 
 export const ioConfig = (server: any, corsOptions: any) => {
@@ -64,11 +64,29 @@ export const ioConfig = (server: any, corsOptions: any) => {
         })
 
         //listen someone win game
-        socket.on('someoneWinGame', ({username, room}) => {
-            socket.broadcast.to(room).emit('endGame', (username));
+        socket.on('someoneWinGame', ({username, room, winNumber}) => {
+            //handle anyone also waiting winNumber
+            const usersWin = users.filter(u => 
+                u.waitingList.indexOf(winNumber) !== -1 && 
+                u.username !== username
+            );
+            if(usersWin.length > 0){
+                //multiple winner
+                let usernameList = username;
+                usersWin.forEach(user => {
+                    usernameList = usernameList.concat(` and ${user.username}`)
+                })
+                io.to(room).emit('winGameMultiple', usernameList);
+            } else{
+                //one winner
+                io.to(room).emit('winGameOne', username);
+            }
+            clearUserWaitingList();
         })
 
-        socket.on('gonnaWin', ({username, room}) => {
+        socket.on('gonnaWin', ({username, room, waitingNumber}) => {
+            //handle add waiting number
+            addUserWaitingList(username, waitingNumber);
             io.to(room).emit('someoneGonnaWinToAll', (username));
         })
 

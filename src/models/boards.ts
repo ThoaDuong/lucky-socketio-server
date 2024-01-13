@@ -21,8 +21,8 @@ export const boards: Board[] = [
     },
     {
         id: 2,
-        color: "#FFD24C", 
-        title: "Pink",
+        color: "#FFC436", 
+        title: "Yellow",
         username: null,
         numbers: [
             [null, 19, 28, null, 46, null, 68, 75, null],

@@ -56,10 +56,27 @@ const ioConfig = (server, corsOptions) => {
             io.to(room).emit('someoneSendMessageToAll', ({ username, message }));
         });
         //listen someone win game
-        socket.on('someoneWinGame', ({ username, room }) => {
-            socket.broadcast.to(room).emit('endGame', (username));
+        socket.on('someoneWinGame', ({ username, room, winNumber }) => {
+            //handle anyone also waiting winNumber
+            const usersWin = users_1.users.filter(u => u.waitingList.indexOf(winNumber) !== -1 &&
+                u.username !== username);
+            if (usersWin.length > 0) {
+                //multiple winner
+                let usernameList = username;
+                usersWin.forEach(user => {
+                    usernameList = usernameList.concat(` and ${user.username}`);
+                });
+                io.to(room).emit('winGameMultiple', usernameList);
+            }
+            else {
+                //one winner
+                io.to(room).emit('winGameOne', username);
+            }
+            (0, users_1.clearUserWaitingList)();
         });
-        socket.on('gonnaWin', ({ username, room }) => {
+        socket.on('gonnaWin', ({ username, room, waitingNumber }) => {
+            //handle add waiting number
+            (0, users_1.addUserWaitingList)(username, waitingNumber);
             io.to(room).emit('someoneGonnaWinToAll', (username));
         });
         //listen user take admin

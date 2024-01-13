@@ -32,3 +32,16 @@ export const updateUserReleaseAdmin = (username: string) => {
     }
     users.splice(index, 1, newUser);
 }
+
+export const addUserWaitingList = (username: string, waitingNumber: number) => {
+    const index = users.findIndex(user => user.username === username);
+    const newUser: User = { 
+        ...users[index],
+        waitingList: users[index].waitingList.concat(waitingNumber) 
+    }
+    users.splice(index, 1, newUser);
+}
+
+export const clearUserWaitingList = () => {
+    users.map(user => user.waitingList = []);
+}
