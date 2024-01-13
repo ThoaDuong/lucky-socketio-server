@@ -30,11 +30,20 @@ export const ioConfig = (server: any, corsOptions: any) => {
             //disconnect
             socket.on("disconnect", () => {
                 //handle user leave
-                removeUser(user.id);
+                removeUser(username);
                 removeBoardRoom(username, room);
                 socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
                 socket.leave(room);
             })
+        })
+
+        //handle leave room
+        socket.on("userLeaveRoom", ({username, room}) => {
+            //handle user leave
+            removeUser(username);
+            removeBoardRoom(username, room);
+            socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
+            socket.leave(room);
         })
 
         //listen user change board

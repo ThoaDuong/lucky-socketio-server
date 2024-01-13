@@ -10,8 +10,8 @@ export const addNewUser = (user: User) => {
     users.push(user);    
 }
 
-export const removeUser = (userId: string) => {
-    const index = users.findIndex(user => user.id === userId);
+export const removeUser = (username: string) => {
+    const index = users.findIndex(user => user.username === username);
     users.splice(index, 1);
 }
 
