@@ -240,108 +240,108 @@ exports.boards = [
             [null, 17, 28, 31, 47, null, null, 71, null]
         ]
     },
-    {
-        id: 15,
-        title: 'Green',
-        color: '#638889',
-        username: null,
-        numbers: [
-            [7, 18, null, 30, 43, null, 67, null, null],
-            [null, null, 21, 36, 49, null, 63, null, 84],
-            [5, null, null, 34, null, 52, 64, 76, null],
-            [null, 11, 26, 33, 47, null, null, 73, null],
-            [9, null, 20, null, 40, null, 65, null, 87],
-            [null, 17, 27, null, 46, 54, 66, null, null],
-            [1, null, 24, 32, null, 59, null, 79, null],
-            [8, 12, null, null, null, 51, null, 75, 82],
-            [null, 16, null, 35, null, 53, 61, null, 89]
-        ]
-    },
-    {
-        id: 16,
-        title: 'Orange',
-        color: '#FF9843',
-        username: null,
-        numbers: [
-            [4, 18, null, 37, null, null, 60, 70, null],
-            [6, null, null, 35, 45, null, null, 71, 87],
-            [null, 11, 24, null, 41, null, 61, null, 82],
-            [null, 17, 29, null, 48, 53, null, null, 80],
-            [null, 13, null, null, null, 51, 67, 73, 89],
-            [5, 19, 23, null, null, 58, null, 78, null],
-            [null, 16, null, 38, 42, null, 63, null, 85],
-            [8, null, null, 36, 46, null, null, 77, 88],
-            [1, null, 20, 34, null, 59, null, 76, null]
-        ]
-    },
-    {
-        id: 17,
-        title: 'Dark Blue',
-        color: '#365486',
-        username: null,
-        numbers: [
-            [3, 18, null, 37, 40, null, 64, null, null],
-            [1, null, 27, null, 49, 50, null, null, 80],
-            [null, 19, 23, 36, null, null, 68, 75, null],
-            [null, 12, null, null, 47, 54, null, 79, 89],
-            [4, null, 21, 35, 48, null, null, null, 82],
-            [null, null, 20, 34, null, 52, null, 74, 86],
-            [null, 15, 26, null, null, 56, 63, null, 83],
-            [8, null, null, 39, null, 53, null, 72, 87],
-            [null, 13, 28, null, 43, 58, 65, null, null]
-        ]
-    },
-    {
-        id: 18,
-        title: 'Pink',
-        color: '#FF8F8F',
-        username: null,
-        numbers: [
-            [null, 18, null, 32, 40, null, null, 77, 82],
-            [null, null, 27, 34, 49, 50, null, 79, null],
-            [3, null, null, 33, null, 52, null, 73, 89],
-            [null, null, 25, 37, null, 58, 61, null, 81],
-            [4, null, 24, null, 43, null, 63, null, 87],
-            [8, null, 28, null, null, 51, null, 75, 86],
-            [2, 11, null, 38, null, null, 64, null, 85],
-            [6, 10, null, null, 47, 56, 69, null, null],
-            [null, 12, 26, null, 44, null, 62, 74, null]
-        ]
-    },
-    {
-        id: 19,
-        title: 'Purple',
-        color: '#756AB6',
-        username: null,
-        numbers: [
-            [1, 14, 21, null, null, null, 60, 74, null],
-            [6, null, null, 38, null, 56, null, 77, 84],
-            [2, 18, null, null, null, 51, null, 79, 87],
-            [null, 15, 28, null, 45, null, 69, 70, null],
-            [null, null, 22, 36, 48, 55, null, null, 85],
-            [9, 12, null, null, 41, 53, null, 75, null],
-            [5, 10, 23, null, null, null, 68, 78, null],
-            [null, 13, 20, null, 43, 54, null, null, 83],
-            [4, null, null, 30, 44, 59, null, null, 81]
-        ]
-    },
-    {
-        id: 20,
-        title: 'Green',
-        color: '#65B741',
-        username: null,
-        numbers: [
-            [4, 18, null, null, 45, null, 64, null, 83],
-            [null, 17, 25, null, null, 54, 65, 74, null],
-            [null, 13, null, 32, 41, null, null, 75, 86],
-            [5, null, 20, null, null, null, 67, 79, 82],
-            [7, null, null, null, 42, 59, 66, 72, null],
-            [null, 14, null, 39, 47, null, 68, null, 85],
-            [null, 15, null, 31, null, 51, null, 77, 80],
-            [3, null, 22, null, 48, 52, 60, null, null],
-            [null, 19, 26, 38, null, 50, null, 73, null]
-        ]
-    },
+    // {
+    //     id: 15,
+    //     title: 'Green',
+    //     color: '#638889',
+    //     username: null,
+    //     numbers: [
+    //         [7, 18, null, 30, 43, null, 67, null, null],
+    //         [null, null, 21, 36, 49, null, 63, null, 84],
+    //         [5, null, null, 34, null, 52, 64, 76, null],
+    //         [null, 11, 26, 33, 47, null, null, 73, null],
+    //         [9, null, 20, null, 40, null, 65, null, 87],
+    //         [null, 17, 27, null, 46, 54, 66, null, null],
+    //         [1, null, 24, 32, null, 59, null, 79, null],
+    //         [8, 12, null, null, null, 51, null, 75, 82],
+    //         [null, 16, null, 35, null, 53, 61, null, 89]
+    //     ]
+    // },
+    // {
+    //     id: 16,
+    //     title: 'Orange',
+    //     color: '#FF9843',
+    //     username: null,
+    //     numbers: [
+    //         [4, 18, null, 37, null, null, 60, 70, null],
+    //         [6, null, null, 35, 45, null, null, 71, 87],
+    //         [null, 11, 24, null, 41, null, 61, null, 82],
+    //         [null, 17, 29, null, 48, 53, null, null, 80],
+    //         [null, 13, null, null, null, 51, 67, 73, 89],
+    //         [5, 19, 23, null, null, 58, null, 78, null],
+    //         [null, 16, null, 38, 42, null, 63, null, 85],
+    //         [8, null, null, 36, 46, null, null, 77, 88],
+    //         [1, null, 20, 34, null, 59, null, 76, null]
+    //     ]
+    // },
+    // {
+    //     id: 17,
+    //     title: 'Dark Blue',
+    //     color: '#365486',
+    //     username: null,
+    //     numbers: [
+    //         [3, 18, null, 37, 40, null, 64, null, null],
+    //         [1, null, 27, null, 49, 50, null, null, 80],
+    //         [null, 19, 23, 36, null, null, 68, 75, null],
+    //         [null, 12, null, null, 47, 54, null, 79, 89],
+    //         [4, null, 21, 35, 48, null, null, null, 82],
+    //         [null, null, 20, 34, null, 52, null, 74, 86],
+    //         [null, 15, 26, null, null, 56, 63, null, 83],
+    //         [8, null, null, 39, null, 53, null, 72, 87],
+    //         [null, 13, 28, null, 43, 58, 65, null, null]
+    //     ]
+    // },
+    // {
+    //     id: 18,
+    //     title: 'Pink',
+    //     color: '#FF8F8F',
+    //     username: null,
+    //     numbers: [
+    //         [null, 18, null, 32, 40, null, null, 77, 82],
+    //         [null, null, 27, 34, 49, 50, null, 79, null],
+    //         [3, null, null, 33, null, 52, null, 73, 89],
+    //         [null, null, 25, 37, null, 58, 61, null, 81],
+    //         [4, null, 24, null, 43, null, 63, null, 87],
+    //         [8, null, 28, null, null, 51, null, 75, 86],
+    //         [2, 11, null, 38, null, null, 64, null, 85],
+    //         [6, 10, null, null, 47, 56, 69, null, null],
+    //         [null, 12, 26, null, 44, null, 62, 74, null]
+    //     ]
+    // },
+    // {
+    //     id: 19,
+    //     title: 'Purple',
+    //     color: '#756AB6',
+    //     username: null,
+    //     numbers: [
+    //         [1, 14, 21, null, null, null, 60, 74, null],
+    //         [6, null, null, 38, null, 56, null, 77, 84],
+    //         [2, 18, null, null, null, 51, null, 79, 87],
+    //         [null, 15, 28, null, 45, null, 69, 70, null],
+    //         [null, null, 22, 36, 48, 55, null, null, 85],
+    //         [9, 12, null, null, 41, 53, null, 75, null],
+    //         [5, 10, 23, null, null, null, 68, 78, null],
+    //         [null, 13, 20, null, 43, 54, null, null, 83],
+    //         [4, null, null, 30, 44, 59, null, null, 81]
+    //     ]
+    // },
+    // {
+    //     id: 20,
+    //     title: 'Green',
+    //     color: '#65B741',
+    //     username: null,
+    //     numbers: [
+    //         [4, 18, null, null, 45, null, 64, null, 83],
+    //         [null, 17, 25, null, null, 54, 65, 74, null],
+    //         [null, 13, null, 32, 41, null, null, 75, 86],
+    //         [5, null, 20, null, null, null, 67, 79, 82],
+    //         [7, null, null, null, 42, 59, 66, 72, null],
+    //         [null, 14, null, 39, 47, null, 68, null, 85],
+    //         [null, 15, null, 31, null, 51, null, 77, 80],
+    //         [3, null, 22, null, 48, 52, 60, null, null],
+    //         [null, 19, 26, 38, null, 50, null, 73, null]
+    //     ]
+    // },
 ];
 exports.boards_room = [];
 const initBoardRoom = (username, room) => {

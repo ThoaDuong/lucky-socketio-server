@@ -1,6 +1,6 @@
 import { Server } from 'socket.io';
 import { User } from './interfaces/User';
-import { addNewUser, addUserWaitingList, clearUserWaitingList, removeUser, updateUserReleaseAdmin, updateUserTakeAdmin, users } from './models/users';
+import { addNewUser, addUserWaitingList, clearUserWaitingList, getUserByUsername, removeUser, updateUserReleaseAdmin, updateUserTakeAdmin, users } from './models/users';
 import { initBoardRoom, removeBoardRoom, updateBoardRoom } from './models/boards';
 
 export const ioConfig = (server: any, corsOptions: any) => {
@@ -30,20 +30,26 @@ export const ioConfig = (server: any, corsOptions: any) => {
             //disconnect
             socket.on("disconnect", () => {
                 //handle user leave
-                removeUser(username);
-                removeBoardRoom(username, room);
-                socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
-                socket.leave(room);
+                const user: User = getUserByUsername(username);
+                if(user){
+                    removeUser(username);
+                    removeBoardRoom(username, room);
+                    socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
+                    socket.leave(room);
+                }
             })
         })
 
         //handle leave room
         socket.on("userLeaveRoom", ({username, room}) => {
             //handle user leave
-            removeUser(username);
-            removeBoardRoom(username, room);
-            socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
-            socket.leave(room);
+            const user: User = getUserByUsername(username);
+            if(user){
+                removeUser(username);
+                removeBoardRoom(username, room);
+                socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
+                socket.leave(room);
+            }
         })
 
         //listen user change board

@@ -27,19 +27,25 @@ const ioConfig = (server, corsOptions) => {
             //disconnect
             socket.on("disconnect", () => {
                 //handle user leave
-                (0, users_1.removeUser)(username);
-                (0, boards_1.removeBoardRoom)(username, room);
-                socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
-                socket.leave(room);
+                const user = (0, users_1.getUserByUsername)(username);
+                if (user) {
+                    (0, users_1.removeUser)(username);
+                    (0, boards_1.removeBoardRoom)(username, room);
+                    socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
+                    socket.leave(room);
+                }
             });
         });
         //handle leave room
         socket.on("userLeaveRoom", ({ username, room }) => {
             //handle user leave
-            (0, users_1.removeUser)(username);
-            (0, boards_1.removeBoardRoom)(username, room);
-            socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
-            socket.leave(room);
+            const user = (0, users_1.getUserByUsername)(username);
+            if (user) {
+                (0, users_1.removeUser)(username);
+                (0, boards_1.removeBoardRoom)(username, room);
+                socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
+                socket.leave(room);
+            }
         });
         //listen user change board
         socket.on('userChangeBoard', ({ username, room, targetBoardId }) => {
