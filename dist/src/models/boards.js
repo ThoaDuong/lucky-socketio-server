@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.autoGenerateRandomBoard = exports.updateBoardRoom = exports.removeBoardRoom = exports.initBoardRoom = exports.boards_room = exports.boards = void 0;
+exports.autoGenerateRandomBoard = exports.updateBoardRoomMicMuted = exports.updateBoardRoom = exports.removeBoardRoom = exports.initBoardRoom = exports.boards_room = exports.boards = void 0;
 exports.boards = [
     {
         id: 1,
@@ -360,6 +360,7 @@ const initBoardRoom = (username, room) => {
         username: username,
         room: room,
         boardId: boardId,
+        micMuted: true
     });
 };
 exports.initBoardRoom = initBoardRoom;
@@ -374,6 +375,12 @@ const updateBoardRoom = (username, room, targetBoardId) => {
     exports.boards_room.splice(currentIndex, 1, newObject);
 };
 exports.updateBoardRoom = updateBoardRoom;
+const updateBoardRoomMicMuted = (username, room, targetMicMuted) => {
+    const currentIndex = exports.boards_room.findIndex(b => b.username === username && b.room === room);
+    const newObject = Object.assign(Object.assign({}, exports.boards_room[currentIndex]), { micMuted: targetMicMuted });
+    exports.boards_room.splice(currentIndex, 1, newObject);
+};
+exports.updateBoardRoomMicMuted = updateBoardRoomMicMuted;
 ///////////
 // Code auto generate random board
 // return random number from min to max and not includes in listNumberCheck

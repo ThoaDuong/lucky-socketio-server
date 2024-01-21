@@ -1,5 +1,6 @@
 export interface BoardRoom {
     username: string,
     room: string,
-    boardId: number
+    boardId: number,
+    micMuted: boolean,
 }

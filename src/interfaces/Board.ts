@@ -3,5 +3,6 @@ export interface Board {
     color: string,
     title: string,
     numbers: (number | null)[][],
-    username: string | null
+    username: string | null,
+    micMuted?: boolean
 }

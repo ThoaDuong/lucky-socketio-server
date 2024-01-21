@@ -1,7 +1,7 @@
 import { Server } from 'socket.io';
 import { User } from './interfaces/User';
 import { addNewUser, addUserWaitingList, clearUserWaitingList, getUserByUsername, removeUser, updateUserReleaseAdmin, updateUserTakeAdmin, users } from './models/users';
-import { initBoardRoom, removeBoardRoom, updateBoardRoom } from './models/boards';
+import { initBoardRoom, removeBoardRoom, updateBoardRoom, updateBoardRoomMicMuted } from './models/boards';
 
 export const ioConfig = (server: any, corsOptions: any) => {
 
@@ -66,6 +66,11 @@ export const ioConfig = (server: any, corsOptions: any) => {
                 randomNumber: randomNumber,
                 calledNumbers: calledNumbers
             });
+        })
+
+        socket.on('changeMicMuted', ({username, room, micMuted}) => {
+            updateBoardRoomMicMuted(username, room, micMuted);
+            io.to(room).emit('someoneChangeMicMuted');
         })
 
         //listen stop and clear numbers

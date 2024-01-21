@@ -363,6 +363,7 @@ export const initBoardRoom = (username: string, room: string) => {
         username: username,
         room: room,
         boardId: boardId,
+        micMuted: true
     })
 }
 
@@ -374,6 +375,12 @@ export const removeBoardRoom = (username: string, room: string) => {
 export const  updateBoardRoom = (username: string, room: string, targetBoardId: number) => {
     const currentIndex = boards_room.findIndex(b => b.username === username && b.room === room);
     const newObject = { ...boards_room[currentIndex], boardId: targetBoardId };
+    boards_room.splice(currentIndex, 1, newObject);
+}
+
+export const updateBoardRoomMicMuted = (username: string, room: string, targetMicMuted: boolean) => {
+    const currentIndex = boards_room.findIndex(b => b.username === username && b.room === room);
+    const newObject = { ...boards_room[currentIndex], micMuted: targetMicMuted};
     boards_room.splice(currentIndex, 1, newObject);
 }
 

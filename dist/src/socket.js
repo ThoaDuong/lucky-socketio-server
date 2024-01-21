@@ -61,6 +61,10 @@ const ioConfig = (server, corsOptions) => {
                 calledNumbers: calledNumbers
             });
         });
+        socket.on('changeMicMuted', ({ username, room, micMuted }) => {
+            (0, boards_1.updateBoardRoomMicMuted)(username, room, micMuted);
+            io.to(room).emit('someoneChangeMicMuted');
+        });
         //listen stop and clear numbers
         socket.on('changeStopAndClear', (room) => {
             io.to(room).emit('updateStopAndClear');
