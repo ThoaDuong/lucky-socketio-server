@@ -1,7 +1,8 @@
 import { Server } from 'socket.io';
 import { User } from './interfaces/User';
 import { addNewUser, addUserWaitingList, clearUserWaitingList, getUserByUsername, removeUser, updateUserReleaseAdmin, updateUserTakeAdmin, users } from './models/users';
-import { initBoardRoom, removeBoardRoom, updateBoardRoom, updateBoardRoomMicMuted } from './models/boards';
+import { boards_room, initBoardRoom, removeBoardRoom, updateBoardRoom, updateBoardRoomMicMuted } from './models/boards';
+import { removeStartedRoom } from './models/room';
 
 export const ioConfig = (server: any, corsOptions: any) => {
 
@@ -34,6 +35,11 @@ export const ioConfig = (server: any, corsOptions: any) => {
                 if(user){
                     removeUser(username);
                     removeBoardRoom(username, room);
+                    // if the last person in the room, remove the room from the start list if there is one
+                    const index = boards_room.findIndex(item => item.room === room);
+                    if(index === -1){
+                        removeStartedRoom(room);
+                    }
                     socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
                     socket.leave(room);
                 }
@@ -47,6 +53,11 @@ export const ioConfig = (server: any, corsOptions: any) => {
             if(user){
                 removeUser(username);
                 removeBoardRoom(username, room);
+                // if the last person in the room, remove the room from the start list if there is one
+                const index = boards_room.findIndex(item => item.room === room);
+                if(index === -1){
+                    removeStartedRoom(room);
+                }
                 socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
                 socket.leave(room);
             }

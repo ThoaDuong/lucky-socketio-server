@@ -4,6 +4,7 @@ exports.ioConfig = void 0;
 const socket_io_1 = require("socket.io");
 const users_1 = require("./models/users");
 const boards_1 = require("./models/boards");
+const room_1 = require("./models/room");
 const ioConfig = (server, corsOptions) => {
     const io = new socket_io_1.Server(server, {
         cors: corsOptions
@@ -31,6 +32,11 @@ const ioConfig = (server, corsOptions) => {
                 if (user) {
                     (0, users_1.removeUser)(username);
                     (0, boards_1.removeBoardRoom)(username, room);
+                    // if the last person in the room, remove the room from the start list if there is one
+                    const index = boards_1.boards_room.findIndex(item => item.room === room);
+                    if (index === -1) {
+                        (0, room_1.removeStartedRoom)(room);
+                    }
                     socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
                     socket.leave(room);
                 }
@@ -43,6 +49,11 @@ const ioConfig = (server, corsOptions) => {
             if (user) {
                 (0, users_1.removeUser)(username);
                 (0, boards_1.removeBoardRoom)(username, room);
+                // if the last person in the room, remove the room from the start list if there is one
+                const index = boards_1.boards_room.findIndex(item => item.room === room);
+                if (index === -1) {
+                    (0, room_1.removeStartedRoom)(room);
+                }
                 socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
                 socket.leave(room);
             }
