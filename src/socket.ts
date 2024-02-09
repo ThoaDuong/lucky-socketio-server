@@ -97,7 +97,7 @@ export const ioConfig = (server: any, corsOptions: any) => {
         //listen someone win game
         socket.on('someoneWinGame', ({username, room, winNumber}) => {
             //handle anyone also waiting winNumber
-            const usersWin = users.filter(u => 
+            const usersWin = users?.filter(u => 
                 u.waitingList.indexOf(winNumber) !== -1 && 
                 u.username !== username
             );

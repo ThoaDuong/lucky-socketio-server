@@ -87,7 +87,7 @@ const ioConfig = (server, corsOptions) => {
         //listen someone win game
         socket.on('someoneWinGame', ({ username, room, winNumber }) => {
             //handle anyone also waiting winNumber
-            const usersWin = users_1.users.filter(u => u.waitingList.indexOf(winNumber) !== -1 &&
+            const usersWin = users_1.users === null || users_1.users === void 0 ? void 0 : users_1.users.filter(u => u.waitingList.indexOf(winNumber) !== -1 &&
                 u.username !== username);
             if (usersWin.length > 0) {
                 //multiple winner
