@@ -15,6 +15,13 @@ export const removeUser = (username: string) => {
     users.splice(index, 1);
 }
 
+export const updateUserId = (username: string, newId: string) => {
+    const index = users.findIndex(user => user.username === username);
+    if (index !== -1) {
+        users[index].id = newId;
+    }
+}
+
 export const updateUserTakeAdmin = (username: string) => {
     const index = users.findIndex(user => user.username === username);
     const newUser = { 

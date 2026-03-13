@@ -5,6 +5,10 @@ const socket_io_1 = require("socket.io");
 const users_1 = require("./models/users");
 const boards_1 = require("./models/boards");
 const room_1 = require("./models/room");
+const gameState_1 = require("./models/gameState");
+// Map lưu disconnect timeout theo username — grace period 30s
+const disconnectTimers = new Map();
+const GRACE_PERIOD_MS = 30000; // 30 seconds
 const ioConfig = (server, corsOptions) => {
     const io = new socket_io_1.Server(server, {
         cors: corsOptions
@@ -12,38 +16,72 @@ const ioConfig = (server, corsOptions) => {
     io.on('connection', (socket) => {
         //listen user join
         socket.on('userJoinRoom', ({ username, room }) => {
-            const user = {
-                id: socket.id,
-                username: username,
-                room: room,
-                isAdmin: false,
-                waitingList: []
-            };
-            //handle with model
-            (0, users_1.addNewUser)(user);
-            (0, boards_1.initBoardRoom)(username, room);
-            //handle user join room and broadcast event
-            socket.join(room);
-            socket.broadcast.to(room).emit('someoneJoinRoom', (username));
-            //disconnect
-            socket.on("disconnect", () => {
-                //handle user leave
-                const user = (0, users_1.getUserByUsername)(username);
-                if (user) {
-                    (0, users_1.removeUser)(username);
-                    (0, boards_1.removeBoardRoom)(username, room);
-                    // if the last person in the room, remove the room from the start list if there is one
-                    const index = boards_1.boards_room.findIndex(item => item.room === room);
-                    if (index === -1) {
-                        (0, room_1.removeStartedRoom)(room);
-                    }
-                    socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
-                    socket.leave(room);
+            // Nếu user đang trong grace period (disconnect rồi reconnect), hủy timeout
+            const existingTimer = disconnectTimers.get(username);
+            if (existingTimer) {
+                clearTimeout(existingTimer);
+                disconnectTimers.delete(username);
+            }
+            // Kiểm tra user đã tồn tại (reconnect/refresh case)
+            const existingUser = (0, users_1.getUserByUsername)(username);
+            if (existingUser && existingUser.room === room) {
+                // Cập nhật socket.id mới, giữ nguyên board data
+                (0, users_1.updateUserId)(username, socket.id);
+                socket.join(room);
+                socket.broadcast.to(room).emit('someoneReconnectRoom', (username));
+                // Gửi lại game state hiện tại cho user reconnect
+                const calledNumbers = (0, gameState_1.getCalledNumbers)(room);
+                if (calledNumbers.length > 0) {
+                    socket.emit('roomState', {
+                        calledNumbers: calledNumbers,
+                        randomNumber: calledNumbers[0] || 0
+                    });
                 }
+            }
+            else {
+                // User mới hoàn toàn
+                const user = {
+                    id: socket.id,
+                    username: username,
+                    room: room,
+                    isAdmin: false,
+                    waitingList: []
+                };
+                (0, users_1.addNewUser)(user);
+                (0, boards_1.initBoardRoom)(username, room);
+                socket.join(room);
+                socket.broadcast.to(room).emit('someoneJoinRoom', (username));
+            }
+            //disconnect — grace period 30s trước khi xóa user
+            socket.on("disconnect", () => {
+                socket.broadcast.to(room).emit('someoneDisconnectRoom', (username));
+                const timer = setTimeout(() => {
+                    // Hết grace period → xóa user thật sự
+                    const user = (0, users_1.getUserByUsername)(username);
+                    if (user) {
+                        (0, users_1.removeUser)(username);
+                        (0, boards_1.removeBoardRoom)(username, room);
+                        // if the last person in the room, remove the room from the start list
+                        const index = boards_1.boards_room.findIndex(item => item.room === room);
+                        if (index === -1) {
+                            (0, room_1.removeStartedRoom)(room);
+                        }
+                        socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
+                        socket.leave(room);
+                    }
+                    disconnectTimers.delete(username);
+                }, GRACE_PERIOD_MS);
+                disconnectTimers.set(username, timer);
             });
         });
         //handle leave room
         socket.on("userLeaveRoom", ({ username, room }) => {
+            // Hủy grace period timer nếu có (user chủ động leave)
+            const existingTimer = disconnectTimers.get(username);
+            if (existingTimer) {
+                clearTimeout(existingTimer);
+                disconnectTimers.delete(username);
+            }
             //handle user leave
             const user = (0, users_1.getUserByUsername)(username);
             if (user) {
@@ -67,6 +105,8 @@ const ioConfig = (server, corsOptions) => {
         });
         //listen change numbers
         socket.on('changeRandomNumber', ({ randomNumber, calledNumbers, room }) => {
+            // Lưu calledNumbers vào server để persist qua reconnect
+            (0, gameState_1.setCalledNumbers)(room, calledNumbers);
             io.to(room).emit('updateRandomNumber', {
                 randomNumber: randomNumber,
                 calledNumbers: calledNumbers
@@ -78,6 +118,8 @@ const ioConfig = (server, corsOptions) => {
         });
         //listen stop and clear numbers
         socket.on('changeStopAndClear', (room) => {
+            // Xóa calledNumbers khi game kết thúc
+            (0, gameState_1.clearCalledNumbers)(room);
             io.to(room).emit('updateStopAndClear');
         });
         //listen someone send message

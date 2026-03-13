@@ -1,8 +1,13 @@
 import { Server } from 'socket.io';
 import { User } from './interfaces/User';
-import { addNewUser, addUserWaitingList, clearUserWaitingList, getUserByUsername, removeUser, updateUserReleaseAdmin, updateUserTakeAdmin, users } from './models/users';
+import { addNewUser, addUserWaitingList, clearUserWaitingList, getUserByUsername, removeUser, updateUserId, updateUserReleaseAdmin, updateUserTakeAdmin, users } from './models/users';
 import { boards_room, initBoardRoom, removeBoardRoom, updateBoardRoom, updateBoardRoomMicMuted } from './models/boards';
 import { removeStartedRoom } from './models/room';
+import { getCalledNumbers, setCalledNumbers, clearCalledNumbers } from './models/gameState';
+
+// Map lưu disconnect timeout theo username — grace period 30s
+const disconnectTimers: Map<string, NodeJS.Timeout> = new Map();
+const GRACE_PERIOD_MS = 30000; // 30 seconds
 
 export const ioConfig = (server: any, corsOptions: any) => {
 
@@ -13,41 +18,77 @@ export const ioConfig = (server: any, corsOptions: any) => {
     io.on('connection', (socket) => {
         
         //listen user join
-        socket.on('userJoinRoom', ({username, room}) => {    
-            const user: User = {
-                id: socket.id,
-                username: username,
-                room: room,
-                isAdmin: false,
-                waitingList: []
+        socket.on('userJoinRoom', ({username, room}) => {
+            // Nếu user đang trong grace period (disconnect rồi reconnect), hủy timeout
+            const existingTimer = disconnectTimers.get(username);
+            if (existingTimer) {
+                clearTimeout(existingTimer);
+                disconnectTimers.delete(username);
             }
-            //handle with model
-            addNewUser(user);
-            initBoardRoom(username, room); 
-            //handle user join room and broadcast event
-            socket.join(room);
-            socket.broadcast.to(room).emit('someoneJoinRoom', (username));
-    
-            //disconnect
-            socket.on("disconnect", () => {
-                //handle user leave
-                const user: User = getUserByUsername(username);
-                if(user){
-                    removeUser(username);
-                    removeBoardRoom(username, room);
-                    // if the last person in the room, remove the room from the start list if there is one
-                    const index = boards_room.findIndex(item => item.room === room);
-                    if(index === -1){
-                        removeStartedRoom(room);
-                    }
-                    socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
-                    socket.leave(room);
+
+            // Kiểm tra user đã tồn tại (reconnect/refresh case)
+            const existingUser: User = getUserByUsername(username);
+            if (existingUser && existingUser.room === room) {
+                // Cập nhật socket.id mới, giữ nguyên board data
+                updateUserId(username, socket.id);
+                socket.join(room);
+                socket.broadcast.to(room).emit('someoneReconnectRoom', (username));
+                // Gửi lại game state hiện tại cho user reconnect
+                const calledNumbers = getCalledNumbers(room);
+                if (calledNumbers.length > 0) {
+                    socket.emit('roomState', {
+                        calledNumbers: calledNumbers,
+                        randomNumber: calledNumbers[0] || 0
+                    });
                 }
+            } else {
+                // User mới hoàn toàn
+                const user: User = {
+                    id: socket.id,
+                    username: username,
+                    room: room,
+                    isAdmin: false,
+                    waitingList: []
+                }
+                addNewUser(user);
+                initBoardRoom(username, room); 
+                socket.join(room);
+                socket.broadcast.to(room).emit('someoneJoinRoom', (username));
+            }
+    
+            //disconnect — grace period 30s trước khi xóa user
+            socket.on("disconnect", () => {
+                socket.broadcast.to(room).emit('someoneDisconnectRoom', (username));
+                
+                const timer = setTimeout(() => {
+                    // Hết grace period → xóa user thật sự
+                    const user: User = getUserByUsername(username);
+                    if(user){
+                        removeUser(username);
+                        removeBoardRoom(username, room);
+                        // if the last person in the room, remove the room from the start list
+                        const index = boards_room.findIndex(item => item.room === room);
+                        if(index === -1){
+                            removeStartedRoom(room);
+                        }
+                        socket.broadcast.to(room).emit('someoneLeaveRoom', (username));
+                        socket.leave(room);
+                    }
+                    disconnectTimers.delete(username);
+                }, GRACE_PERIOD_MS);
+                disconnectTimers.set(username, timer);
             })
         })
 
         //handle leave room
         socket.on("userLeaveRoom", ({username, room}) => {
+            // Hủy grace period timer nếu có (user chủ động leave)
+            const existingTimer = disconnectTimers.get(username);
+            if (existingTimer) {
+                clearTimeout(existingTimer);
+                disconnectTimers.delete(username);
+            }
+
             //handle user leave
             const user: User = getUserByUsername(username);
             if(user){
@@ -73,6 +114,8 @@ export const ioConfig = (server: any, corsOptions: any) => {
 
         //listen change numbers
         socket.on('changeRandomNumber', ({randomNumber, calledNumbers, room}) => {
+            // Lưu calledNumbers vào server để persist qua reconnect
+            setCalledNumbers(room, calledNumbers);
             io.to(room).emit('updateRandomNumber', {
                 randomNumber: randomNumber,
                 calledNumbers: calledNumbers
@@ -86,6 +129,8 @@ export const ioConfig = (server: any, corsOptions: any) => {
 
         //listen stop and clear numbers
         socket.on('changeStopAndClear', (room) => {
+            // Xóa calledNumbers khi game kết thúc
+            clearCalledNumbers(room);
             io.to(room).emit('updateStopAndClear');
         })
 
