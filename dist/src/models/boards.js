@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.autoGenerateRandomBoard = exports.updateBoardRoomMicMuted = exports.updateBoardRoom = exports.removeBoardRoom = exports.initBoardRoom = exports.boards_room = exports.boards = void 0;
+exports.autoGenerateRandomBoard = exports.updateBoardRoomMicMuted = exports.updateBoardRoom = exports.updateBoardRoomUsername = exports.removeBoardRoom = exports.initBoardRoom = exports.boards_room = exports.boards = void 0;
 exports.boards = [
     {
         id: 1,
@@ -369,6 +369,14 @@ const removeBoardRoom = (username, room) => {
     exports.boards_room.splice(currentIndex, 1);
 };
 exports.removeBoardRoom = removeBoardRoom;
+const updateBoardRoomUsername = (oldUsername, newUsername, room) => {
+    const currentIndex = exports.boards_room.findIndex(b => b.username === oldUsername && b.room === room);
+    if (currentIndex !== -1) {
+        const newObject = Object.assign(Object.assign({}, exports.boards_room[currentIndex]), { username: newUsername });
+        exports.boards_room.splice(currentIndex, 1, newObject);
+    }
+};
+exports.updateBoardRoomUsername = updateBoardRoomUsername;
 const updateBoardRoom = (username, room, targetBoardId) => {
     const currentIndex = exports.boards_room.findIndex(b => b.username === username && b.room === room);
     const newObject = Object.assign(Object.assign({}, exports.boards_room[currentIndex]), { boardId: targetBoardId });

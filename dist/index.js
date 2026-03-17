@@ -22,6 +22,7 @@ const server = (0, http_1.createServer)(app);
 (0, socket_1.ioConfig)(server, corsOptions);
 //handle API
 app.use((0, cors_1.default)(corsOptions));
+app.use(express_1.default.json());
 app.use(users_1.userRouter);
 app.use(boards_1.boardRouter);
 app.use(room_1.roomRouter);

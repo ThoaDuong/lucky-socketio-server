@@ -372,6 +372,14 @@ export const removeBoardRoom = (username: string, room: string) => {
     boards_room.splice(currentIndex, 1);
 }
 
+export const updateBoardRoomUsername = (oldUsername: string, newUsername: string, room: string) => {
+    const currentIndex = boards_room.findIndex(b => b.username === oldUsername && b.room === room);
+    if (currentIndex !== -1) {
+        const newObject = { ...boards_room[currentIndex], username: newUsername };
+        boards_room.splice(currentIndex, 1, newObject);
+    }
+}
+
 export const  updateBoardRoom = (username: string, room: string, targetBoardId: number) => {
     const currentIndex = boards_room.findIndex(b => b.username === username && b.room === room);
     const newObject = { ...boards_room[currentIndex], boardId: targetBoardId };

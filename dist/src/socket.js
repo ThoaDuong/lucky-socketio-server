@@ -103,6 +103,12 @@ const ioConfig = (server, corsOptions) => {
             //send event to client
             io.to(room).emit('someoneChangeBoardToAll');
         });
+        //listen user rename
+        socket.on('userRename', ({ oldUsername, newUsername, room }) => {
+            // We already updated models via the REST API, 
+            // so we just broadcast to other clients to refresh their board list.
+            socket.broadcast.to(room).emit('someoneRenameToAll', { oldUsername, newUsername });
+        });
         //listen change numbers
         socket.on('changeRandomNumber', ({ randomNumber, calledNumbers, room }) => {
             // Lưu calledNumbers vào server để persist qua reconnect

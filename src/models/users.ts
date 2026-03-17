@@ -22,6 +22,13 @@ export const updateUserId = (username: string, newId: string) => {
     }
 }
 
+export const updateUserName = (oldUsername: string, newUsername: string) => {
+    const index = users.findIndex(user => user.username === oldUsername);
+    if (index !== -1) {
+        users[index].username = newUsername;
+    }
+}
+
 export const updateUserTakeAdmin = (username: string) => {
     const index = users.findIndex(user => user.username === username);
     const newUser = { 

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.clearUserWaitingList = exports.addUserWaitingList = exports.updateUserReleaseAdmin = exports.updateUserTakeAdmin = exports.updateUserId = exports.removeUser = exports.addNewUser = exports.getUserByUsername = exports.users = void 0;
+exports.clearUserWaitingList = exports.addUserWaitingList = exports.updateUserReleaseAdmin = exports.updateUserTakeAdmin = exports.updateUserName = exports.updateUserId = exports.removeUser = exports.addNewUser = exports.getUserByUsername = exports.users = void 0;
 exports.users = [];
 const getUserByUsername = (username) => {
     return exports.users.find(user => user.username === username);
@@ -22,6 +22,13 @@ const updateUserId = (username, newId) => {
     }
 };
 exports.updateUserId = updateUserId;
+const updateUserName = (oldUsername, newUsername) => {
+    const index = exports.users.findIndex(user => user.username === oldUsername);
+    if (index !== -1) {
+        exports.users[index].username = newUsername;
+    }
+};
+exports.updateUserName = updateUserName;
 const updateUserTakeAdmin = (username) => {
     const index = exports.users.findIndex(user => user.username === username);
     const newUser = Object.assign(Object.assign({}, exports.users[index]), { isAdmin: true });

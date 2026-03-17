@@ -21,6 +21,7 @@ ioConfig(server, corsOptions);
 
 //handle API
 app.use(cors(corsOptions))
+app.use(express.json());
 app.use(userRouter);
 app.use(boardRouter);
 app.use(roomRouter);
