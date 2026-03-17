@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.autoGenerateRandomBoard = exports.updateBoardRoomMicMuted = exports.updateBoardRoom = exports.updateBoardRoomUsername = exports.removeBoardRoom = exports.initBoardRoom = exports.boards_room = exports.boards = void 0;
+exports.autoGenerateRandomBoard = exports.updateBoardRoomMicMuted = exports.updateBoardRoom = exports.updateBoardRoomUsername = exports.removeBoardRoom = exports.updateBoardRoomSpeakerMuted = exports.initBoardRoom = exports.boards_room = exports.boards = void 0;
 exports.boards = [
     {
         id: 1,
@@ -360,10 +360,20 @@ const initBoardRoom = (username, room) => {
         username: username,
         room: room,
         boardId: boardId,
-        micMuted: true
+        micMuted: true,
+        speakerMuted: false
     });
 };
 exports.initBoardRoom = initBoardRoom;
+// Update speaker muted status
+const updateBoardRoomSpeakerMuted = (username, room, targetSpeakerMuted) => {
+    const currentIndex = exports.boards_room.findIndex(b => b.username === username && b.room === room);
+    if (currentIndex !== -1) {
+        const newObject = Object.assign(Object.assign({}, exports.boards_room[currentIndex]), { speakerMuted: targetSpeakerMuted });
+        exports.boards_room.splice(currentIndex, 1, newObject);
+    }
+};
+exports.updateBoardRoomSpeakerMuted = updateBoardRoomSpeakerMuted;
 const removeBoardRoom = (username, room) => {
     const currentIndex = exports.boards_room.findIndex(b => b.username === username && b.room === room);
     exports.boards_room.splice(currentIndex, 1);

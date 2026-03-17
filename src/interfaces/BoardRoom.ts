@@ -3,4 +3,5 @@ export interface BoardRoom {
     room: string,
     boardId: number,
     micMuted: boolean,
+    speakerMuted: boolean,
 }

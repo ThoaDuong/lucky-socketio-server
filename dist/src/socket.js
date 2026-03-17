@@ -103,6 +103,11 @@ const ioConfig = (server, corsOptions) => {
             //send event to client
             io.to(room).emit('someoneChangeBoardToAll');
         });
+        //listen someone change speaker
+        socket.on('changeSpeakerMuted', ({ username, room, speakerMuted }) => {
+            (0, boards_1.updateBoardRoomSpeakerMuted)(username, room, speakerMuted);
+            io.to(room).emit('someoneChangeSpeakerMuted');
+        });
         //listen user rename
         socket.on('userRename', ({ oldUsername, newUsername, room }) => {
             // We already updated models via the REST API, 

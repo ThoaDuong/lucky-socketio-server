@@ -1,7 +1,7 @@
 import { Server } from 'socket.io';
 import { User } from './interfaces/User';
 import { addNewUser, addUserWaitingList, clearUserWaitingList, getUserByUsername, removeUser, updateUserId, updateUserReleaseAdmin, updateUserTakeAdmin, users } from './models/users';
-import { boards_room, initBoardRoom, removeBoardRoom, updateBoardRoom, updateBoardRoomMicMuted } from './models/boards';
+import { boards_room, initBoardRoom, removeBoardRoom, updateBoardRoom, updateBoardRoomMicMuted, updateBoardRoomSpeakerMuted } from './models/boards';
 import { removeStartedRoom } from './models/room';
 import { getCalledNumbers, setCalledNumbers, clearCalledNumbers } from './models/gameState';
 
@@ -110,6 +110,12 @@ export const ioConfig = (server: any, corsOptions: any) => {
             updateBoardRoom(username, room, targetBoardId);
             //send event to client
             io.to(room).emit('someoneChangeBoardToAll');
+        })
+
+        //listen someone change speaker
+        socket.on('changeSpeakerMuted', ({username, room, speakerMuted}) => {
+            updateBoardRoomSpeakerMuted(username, room, speakerMuted);
+            io.to(room).emit('someoneChangeSpeakerMuted');
         })
 
         //listen user rename

@@ -363,8 +363,18 @@ export const initBoardRoom = (username: string, room: string) => {
         username: username,
         room: room,
         boardId: boardId,
-        micMuted: true
+        micMuted: true,
+        speakerMuted: false
     })
+}
+
+// Update speaker muted status
+export const updateBoardRoomSpeakerMuted = (username: string, room: string, targetSpeakerMuted: boolean) => {
+    const currentIndex = boards_room.findIndex(b => b.username === username && b.room === room);
+    if (currentIndex !== -1) {
+        const newObject = { ...boards_room[currentIndex], speakerMuted: targetSpeakerMuted };
+        boards_room.splice(currentIndex, 1, newObject);
+    }
 }
 
 export const removeBoardRoom = (username: string, room: string) => {
